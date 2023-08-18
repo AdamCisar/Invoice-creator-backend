@@ -11,7 +11,7 @@ class ScraperController extends Controller
         $items = array ();
         $client = new Client();
         
-        $crawler = $client->request('GET', 'XXXXXXXXXXXXX');
+        $crawler = $client->request('GET', 'https://www.empiria.sk/');
 
         $searchInput = $crawler->filter('#tbSearch')->first();
 
@@ -23,14 +23,19 @@ class ScraperController extends Controller
         
         // Submit the form by clicking the search button
         $crawler = $client->submit($searchButton);
-
-        $crawler->filter('.horizontal-wr')->each(function ($node) use (&$items){
-
+        
+        $crawler->filter('.card__container')->each(function ($node) use (&$items){
             //getting number
             $price =  preg_replace('/[^0-9.,]/', '', $node->filter('.card__price')->first()->filter('span')->first()->text());
-            $name = $node->filter('a')->first()->text();
+            $name = trim($node->filter('img')->first()->attr('alt'));
             $url = $node->filter('a')->first()->link()->getUri();
-            array_push($items, ['name' => $name, 'price' => $price, 'url' => $url]);
+            $imageUrl = $node->filter('img')->first()->attr('src');
+            array_push($items, [
+                'name' => $name, 
+                'price' => $price, 
+                'url' => $url,
+                'imageUrl' => $imageUrl
+             ]);
         });
         
        return $items;
