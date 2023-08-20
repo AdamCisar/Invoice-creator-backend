@@ -9,7 +9,7 @@ class Item extends Model
 {
     use HasFactory;
     protected $table = 'items';
-    protected $fillable = ['name', 'price', 'url'];
+    protected $fillable = ['name', 'price', 'url', 'imageUrl'];
 
     public function invoices()
     {

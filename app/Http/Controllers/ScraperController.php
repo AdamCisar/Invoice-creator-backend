@@ -26,15 +26,15 @@ class ScraperController extends Controller
         
         $crawler->filter('.card__container')->each(function ($node) use (&$items){
             //getting number
-            $price =  preg_replace('/[^0-9.,]/', '', $node->filter('.card__price')->first()->filter('span')->first()->text());
-            $name = trim($node->filter('img')->first()->attr('alt'));
+            $price = preg_replace('/[^0-9.,]/', '', $node->filter('.card__price')->first()->filter('span')->first()->text());
+            $name = $node->filter('img')->first()->attr('alt');
             $url = $node->filter('a')->first()->link()->getUri();
             $imageUrl = $node->filter('img')->first()->attr('src');
             array_push($items, [
                 'name' => $name, 
                 'price' => $price, 
                 'url' => $url,
-                'imageUrl' => $imageUrl
+                'imageUrl' => "https://www.empiria.sk".$imageUrl
              ]);
         });
         

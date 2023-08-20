@@ -15,8 +15,9 @@ class ItemController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'price' => 'required|numeric',
-            'url' => 'required|url',
+            'price' => 'required',
+            'url' => 'required',
+            'imageUrl' => 'required'
         ]);
     
         if ($validator->fails()) {
@@ -29,6 +30,7 @@ class ItemController extends Controller
 
             $item->name = $request->input('name');
             $item->price = $request->input('price');
+            $item->imageUrl = $request->input('imageUrl');
             $item->save();
 
             return response('Item has been saved to the database!', 200);
