@@ -28,7 +28,7 @@ class InvoiceItemController extends Controller
     }
 
 
-    public function show(int $id)
+    public function show($id)
     {
         $invoice = Invoice::find($id);
         return $invoice->items()->get();
