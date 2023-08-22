@@ -8,6 +8,13 @@ use Illuminate\Http\Response as HttpResponse;
 
 class InvoiceController extends Controller
 {
+    public function delete($id)
+    {
+        Invoice::destroy($id);
+        return response("Succesfuly deleted", 200);
+    }
+
+
     public function save(Request $request)
     {
         Invoice::create($request->all());

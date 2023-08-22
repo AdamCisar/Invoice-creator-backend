@@ -30,7 +30,8 @@ Route::patch('item/{id}', [ItemController::class, 'update']);
 
 Route::post('invoice', [InvoiceController::class, 'save']);
 Route::get('invoice', [InvoiceController::class, 'show']);
+Route::delete('invoice/{id}', [InvoiceController::class, 'delete']);
 
 Route::post('invoice-item', [InvoiceItemController::class, 'save']);
-Route::get('invoice-item/{invoice-id}', [InvoiceItemController::class, 'show']);
+Route::get('invoice-item/{invoiceId}', [InvoiceItemController::class, 'show']);
 
