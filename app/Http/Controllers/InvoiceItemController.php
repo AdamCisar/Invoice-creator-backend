@@ -13,15 +13,15 @@ class InvoiceItemController extends Controller
         $data = $request->all();
 
         foreach ($data as $invoiceItem) {
-            $invoice = Invoice::find($invoiceItem['invoice_id']);
-            $item = Item::find($invoiceItem['item_id']);
+            $invoice = Invoice::find($invoiceItem['pivot']['invoice_id']);
+            $item = Item::find($invoiceItem['pivot']['item_id']);
             
             $existingPivot = $invoice->items()->where('item_id', $item->id)->first();
 
             if ($existingPivot) {
-                    $invoice->items()->sync([$item->id => ['amount' => $invoiceItem['amount']]], false);
+                    $invoice->items()->sync([$item->id => ['amount' => $invoiceItem['pivot']['amount']]], false);
             } else {
-                $invoice->items()->attach($item, ['amount' => $invoiceItem['amount']]);
+                $invoice->items()->attach($item, ['amount' => $invoiceItem['pivot']['amount']]);
             }
                 }
         return response("Invoice items have been saved to the database", 200);
