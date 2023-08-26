@@ -17,8 +17,8 @@ class InvoiceController extends Controller
 
     public function save(Request $request)
     {
-        Invoice::create($request->all());
-        return response("Succesfuly created", 200);
+        $invoice = Invoice::create($request->all());
+        return $invoice;
     }
 
     public function show()
