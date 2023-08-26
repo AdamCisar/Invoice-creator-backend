@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Models\Item;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class InvoiceItemController extends Controller
 {
@@ -27,6 +28,17 @@ class InvoiceItemController extends Controller
         return response("Invoice items have been saved to the database", 200);
     }
 
+    public function delete(Request $request)
+    {
+        $data = $request->all();
+
+        DB::table('invoice_item')
+        ->where('invoice_id', $data["invoice_id"])
+        ->where('item_id', $data["item_id"])
+        ->delete();
+
+        return response("Invoice item has been deleted from database", 200);
+    }
 
     public function show($invoiceId)
     {

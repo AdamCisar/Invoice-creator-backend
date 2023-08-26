@@ -33,5 +33,6 @@ Route::get('invoice', [InvoiceController::class, 'show']);
 Route::delete('invoice/{id}', [InvoiceController::class, 'delete']);
 
 Route::post('invoice-item', [InvoiceItemController::class, 'save']);
+Route::delete('invoice-item', [InvoiceItemController::class, 'delete']);
 Route::get('invoice-item/{invoiceId}', [InvoiceItemController::class, 'show']);
 
