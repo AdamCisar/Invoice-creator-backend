@@ -1,25 +1,26 @@
 <?php 
 
   namespace App\Services\PdfService;
-  require ("fpdf/fpdf.php");
+  require ("tfpdf/tfpdf.php");
 
-  class PdfService extends FPDF
+  class PdfService extends tFPDF
   {
+
+    private $totalAmount = 0;
     function Header(){
       
       //Display Company Info
-      $this->SetFont('Arial','B',14);
-      $this->Cell(50,10,"ABC COMPUTERS",0,1);
-      $this->SetFont('Arial','',14);
-      $this->Cell(50,7,"West Street,",0,1);
-      $this->Cell(50,7,"Salem 636002.",0,1);
-      $this->Cell(50,7,"PH : 8778731770",0,1);
+      $this->AddFont('DejaVu','','DejaVuSansCondensed.ttf',true);
+      $this->SetFont('DejaVu','',14);  
+      $this->Cell(50,10,"Cisar",0,1);
+      $this->Cell(50,7,"ICO,",0,1);
+      $this->Cell(50,7,"Adresa.",0,1);
+      $this->Cell(50,7,"Telefon",0,1);
       
-      //Display INVOICE text
+      //Display CENOVA PONUKA text
       $this->SetY(15);
-      $this->SetX(-40);
-      $this->SetFont('Arial','B',18);
-      $this->Cell(1,10,"FAKTURA",0,1);
+      $this->SetX(-60);
+      $this->Cell(1,10,"Cenová ponuka",0,1);
       
       //Display Horizontal line
       $this->Line(0,48,210,48);
@@ -30,10 +31,8 @@
       //Billing Details
       $this->SetY(55);
       $this->SetX(10);
-      $this->SetFont('Arial','B',12);
-      $this->Cell(50,10,"Bill To: ",0,1);
-      $this->SetFont('Arial','',12);
-      $this->Cell(50,7,iconv('UTF-8', 'ISO-8859-2',$customerInfo->name),0,1);
+      $this->Cell(50,10,"Zákazník:",0,1);
+      $this->Cell(50,7,$customerInfo->name,0,1);
       // $this->Cell(50,7,$customerInfo["address"],0,1);
       // $this->Cell(50,7,$customerInfo["city"],0,1);
       
@@ -50,44 +49,42 @@
       // $this->Cell(50,7,"Invoice Date : ".$customerInfo["invoice_date"]);
       
 
-      //NEED TO USE TFPDF INSTEAD OF FPDF
       //Display Table headings
       $this->SetY(105);
       $this->SetX(10);
-      $this->SetFont('Arial','B',12);
-      $this->Cell(100,9,iconv('UTF-8', 'ISO-8859-2', 'Názov'),1,0);
-      $this->Cell(20,9,iconv('UTF-8', 'ISO-8859-2',"Cena"),1,0,"C");
-      $this->Cell(30,9,iconv('UTF-8', 'ISO-8859-2',"Počet"),1,0,"C");
-      $this->Cell(40,9,iconv('UTF-8', 'ISO-8859-2',"Spolu"),1,1,"C");
-      $this->SetFont('Arial','',12);
+      $this->Cell(130,9,'Názov',1,0);
+      $this->Cell(20,9,"Cena",1,0,"C");
+      $this->Cell(12,9,"Počet",1,0,"C");
+      $this->Cell(20,9,"Spolu",1,1,"C");
       
       //Display table product rows
       foreach($products_info as $row){
-        $this->Cell(100,9,iconv('UTF-8', 'ISO-8859-2',$row->name),"LR",0);
-        $this->Cell(20,9,iconv('UTF-8', 'ISO-8859-2',$row->price),"R",0,"R");
-        $this->Cell(30,9,iconv('UTF-8', 'ISO-8859-2',$row->amount),"R",0,"C");
-        $this->Cell(40,9,((float)str_replace(',','.',$row->price) * $row->amount),"R",1,"R");
+        $total = (float)str_replace(',','.',$row->price) * $row->amount;
+        $this->totalAmount = $this->totalAmount + $total;
+
+        $this->Cell(130,9,$row->name,"LR",0);
+        $this->Cell(20,9,$row->price,"R",0,"R");
+        $this->Cell(12,9,$row->amount,"R",0,"C");
+        $this->Cell(20,9,$total,"R",1,"R");
       }
       //Display table empty rows
       for($i=0;$i<12-count($products_info);$i++)
       {
-        $this->Cell(100,9,"","LR",0);
+        $this->Cell(130,9,"","LR",0);
         $this->Cell(20,9,"","R",0,"R");
-        $this->Cell(30,9,"","R",0,"C");
-        $this->Cell(40,9,"","R",1,"R");
+        $this->Cell(12,9,"","R",0,"C");
+        $this->Cell(20,9,"","R",1,"R");
       }
       //Display table total row
 
-      // $this->SetFont('Arial','B',12);
-      // $this->Cell(150,9,"TOTAL",1,0,"R");
-      // $this->Cell(40,9,$customerInfo["total_amt"],1,1,"R");
+      $this->Cell(130,9,"Celkovo spolu",1,0,"R");
+      $this->Cell(52,9,$this->totalAmount,1,1,"R");
       
       //Display amount in words 
       // $this->SetY(225);
       // $this->SetX(10);
       // $this->SetFont('Arial','B',12);
       // $this->Cell(0,9,"Amount in Words ",0,1);
-      // $this->SetFont('Arial','',12);
       // $this->Cell(0,9,$customerInfo["words"],0,1);
       
     }
@@ -95,15 +92,12 @@
       
       //set footer position
       $this->SetY(-50);
-      $this->SetFont('Arial','B',12);
-      $this->Cell(0,10,"for ABC COMPUTERS",0,1,"R");
+      $this->Cell(0,10,"",0,1,"R");
       $this->Ln(15);
-      $this->SetFont('Arial','',12);
-      $this->Cell(0,10,"Authorized Signature",0,1,"R");
-      $this->SetFont('Arial','',10);
       
       //Display Footer Text
-      $this->Cell(0,10,"This is a computer generated invoice",0,1,"C");
+      $this->SetFont('DejaVu','',8); 
+      $this->Cell(0,10,"Uvedená cenová ponuka slúži len ako orientačná informácia a konečná cena sa môže líšiť v závislosti na rôznych faktoroch a individuálnych potrebách.",0,1,"C");
       
     }
     

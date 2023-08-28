@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Services\PdfService\PdfService;
+use App\Services\PdfService\tFPDF;
 use Illuminate\Support\Facades\DB;
 
 class PdfController extends Controller
@@ -20,9 +21,10 @@ class PdfController extends Controller
             ->select('items.name', 'items.price', 'invoice_item.amount')
             ->get();
 
-        //NEED TO USE TFPDF INSTEAD OF FPDF
         $pdfService = new PdfService("P","mm","A4");
         $pdfService->AddPage();
+        $pdfService->AddFont('DejaVu','','DejaVuSansCondensed.ttf',true);
+        $pdfService->SetFont('DejaVu','',12);  
         $pdfService->body($customerInfo, $products_info); 
         $pdfContent = $pdfService->Output($customerInfo->name . "-cenova-ponuka.pdf", "D");
 
@@ -30,6 +32,5 @@ class PdfController extends Controller
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => "attachment; filename=\"" . $customerInfo->name . "-cenova-ponuka.pdf\"",
         ]);
-        
     }
 }
