@@ -3,6 +3,7 @@
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\InvoiceItemController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ScraperController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('search/{query}', [ScraperController::class, 'show']);
+Route::get('download-invoice/{id}', [PdfController::class, 'show']);
 
 Route::get('item', [ItemController::class, 'show']);
 Route::post('item', [ItemController::class, 'save']);
