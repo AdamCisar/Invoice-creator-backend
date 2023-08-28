@@ -7,23 +7,27 @@
   {
 
     private $totalAmount = 0;
+
     function Header(){
-      
-      //Display Company Info
-      $this->AddFont('DejaVu','','DejaVuSansCondensed.ttf',true);
-      $this->SetFont('DejaVu','',14);  
-      $this->Cell(50,10,"Cisar",0,1);
-      $this->Cell(50,7,"ICO,",0,1);
-      $this->Cell(50,7,"Adresa.",0,1);
-      $this->Cell(50,7,"Telefon",0,1);
-      
-      //Display CENOVA PONUKA text
-      $this->SetY(15);
-      $this->SetX(-60);
-      $this->Cell(1,10,"Cenová ponuka",0,1);
-      
-      //Display Horizontal line
-      $this->Line(0,48,210,48);
+      {
+        if ( $this->PageNo() === 1 ) {
+        //Display Company Info
+        $this->AddFont('DejaVu','','DejaVuSansCondensed.ttf',true);
+        $this->SetFont('DejaVu','',14);  
+        $this->Cell(50,10,"Cisar",0,1);
+        $this->Cell(50,7,"ICO,",0,1);
+        $this->Cell(50,7,"Adresa.",0,1);
+        $this->Cell(50,7,"Telefon",0,1);
+        
+        //Display CENOVA PONUKA text
+        $this->SetY(15);
+        $this->SetX(-60);
+        $this->Cell(1,10,"Cenová ponuka",0,1);
+        
+        //Display Horizontal line
+        $this->Line(0,48,210,48);
+        }
+      }
     }
     
     function body($customerInfo,$products_info){
@@ -59,13 +63,13 @@
       
       //Display table product rows
       foreach($products_info as $row){
-        $total = (float)str_replace(',','.',$row->price) * $row->amount;
+        $total = number_format((float)str_replace(',', '.', $row->price) * $row->amount, 2, '.', '');
         $this->totalAmount = $this->totalAmount + $total;
 
         $this->Cell(130,9,$row->name,"LR",0);
         $this->Cell(20,9,$row->price,"R",0,"R");
         $this->Cell(12,9,$row->amount,"R",0,"C");
-        $this->Cell(20,9,$total,"R",1,"R");
+        $this->Cell(20,9,str_replace('.', ',',$total),"R",1,"R");
       }
       //Display table empty rows
       for($i=0;$i<12-count($products_info);$i++)
@@ -78,7 +82,7 @@
       //Display table total row
 
       $this->Cell(130,9,"Celkovo spolu",1,0,"R");
-      $this->Cell(52,9,$this->totalAmount,1,1,"R");
+      $this->Cell(52,9,str_replace('.', ',',$this->totalAmount),1,1,"R");
       
       //Display amount in words 
       // $this->SetY(225);
@@ -90,16 +94,14 @@
     }
     function Footer(){
       
-      //set footer position
-      $this->SetY(-50);
-      $this->Cell(0,10,"",0,1,"R");
-      $this->Ln(15);
-      
-      //Display Footer Text
-      $this->SetFont('DejaVu','',8); 
-      $this->Cell(0,10,"Uvedená cenová ponuka slúži len ako orientačná informácia a konečná cena sa môže líšiť v závislosti na rôznych faktoroch a individuálnych potrebách.",0,1,"C");
-      
+        //set footer position
+        $this->SetY(-50);
+        $this->Cell(0,10,"",0,1,"R");
+        $this->Ln(15);
+        
+        //Display Footer Text
+        $this->SetFont('DejaVu','',8); 
+        $this->Cell(0,25,"Uvedená cenová ponuka slúži len ako orientačná informácia a konečná cena sa môže líšiť v závislosti na rôznych faktoroch a individuálnych potrebách.",0,1,"C");
     }
-    
   }
 ?>

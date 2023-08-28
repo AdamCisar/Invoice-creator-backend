@@ -26,11 +26,11 @@ class PdfController extends Controller
         $pdfService->AddFont('DejaVu','','DejaVuSansCondensed.ttf',true);
         $pdfService->SetFont('DejaVu','',12);  
         $pdfService->body($customerInfo, $products_info); 
-        $pdfContent = $pdfService->Output($customerInfo->name . "-cenova-ponuka.pdf", "D");
+        $pdfContent = $pdfService->Output($customerInfo->name . "-cenova-ponuka.pdf", "S");
 
         return response($pdfContent, 200, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => "attachment; filename=\"" . $customerInfo->name . "-cenova-ponuka.pdf\"",
+            'Content-Disposition' => "inline; filename=\"" . $customerInfo->name . "-cenova-ponuka.pdf\"",
         ]);
     }
 }

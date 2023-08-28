@@ -24,7 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('search/{query}', [ScraperController::class, 'show']);
-Route::get('download-invoice/{id}', [PdfController::class, 'show']);
+Route::get('invoice-download/{id}', [PdfController::class, 'show']);
 
 Route::get('item', [ItemController::class, 'show']);
 Route::post('item', [ItemController::class, 'save']);
