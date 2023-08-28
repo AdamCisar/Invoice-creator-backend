@@ -27,7 +27,7 @@ class ScraperController extends Controller
         $crawler->filter('.card__container')->each(function ($node) use (&$items){
             //getting number
             $price = preg_replace('/[^0-9.,]/', '', $node->filter('.card__price')->first()->filter('span')->first()->text());
-            $name = $node->filter('img')->first()->attr('alt');
+            $name = $node->filter('.card__title')->first()->filter('a')->text();
             $url = $node->filter('a')->first()->link()->getUri();
             $imageUrl = $node->filter('img')->first()->attr('src');
             array_push($items, [
