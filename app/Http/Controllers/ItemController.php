@@ -16,8 +16,6 @@ class ItemController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'price' => 'required',
-            'url' => 'required',
-            'imageUrl' => 'required'
         ]);
     
         if ($validator->fails()) {

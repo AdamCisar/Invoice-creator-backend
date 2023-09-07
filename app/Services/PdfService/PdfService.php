@@ -12,6 +12,7 @@
       {
         if ( $this->PageNo() === 1 ) {
         //Display Company Info
+        
         $this->AddFont('DejaVu','','DejaVuSansCondensed.ttf',true);
         $this->SetFont('DejaVu','',14);  
         $this->Cell(50,10,"Cisar",0,1);
@@ -25,6 +26,7 @@
         $this->Cell(1,10,"Cenová ponuka",0,1);
         
         //Display Horizontal line
+        $this->Line(0,9,210,9);
         $this->Line(0,48,210,48);
         }
       }
