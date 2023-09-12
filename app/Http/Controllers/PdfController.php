@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Services\PdfService\PdfService;
-use App\Services\PdfService\tFPDF;
 use Illuminate\Support\Facades\DB;
 
 class PdfController extends Controller
@@ -15,11 +14,20 @@ class PdfController extends Controller
         $customerInfo = Invoice::find($id);
         
         //invoice Products
-        $products_info = DB::table('invoice_item')
+        $invoiceItems = DB::table('invoice_item')
             ->join('items', 'invoice_item.item_id', '=', 'items.id')
+            ->join('custom_items', 'invoice_item.item_id', '=', 'items.id')
             ->where('invoice_item.invoice_id', $id)
             ->select('items.name', 'items.price', 'invoice_item.amount')
             ->get();
+
+
+        $customItems = DB::table('custom_items')
+            ->select('name','price', 'amount')
+            ->where('invoice_id', '=', $id)
+            ->get();
+            
+        $products_info = $invoiceItems->concat($customItems);
 
         $pdfService = new PdfService("P","mm","A4");
         $pdfService->AddPage();

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomItemController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\InvoiceItemController;
 use App\Http\Controllers\ItemController;
@@ -24,11 +25,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('search/{query}', [ScraperController::class, 'show']);
+
 Route::get('invoice-download/{id}', [PdfController::class, 'show']);
 
 Route::get('item', [ItemController::class, 'show']);
 Route::post('item', [ItemController::class, 'save']);
 Route::patch('item/{id}', [ItemController::class, 'update']);
+
+Route::put('custom-item', [CustomItemController::class, 'save']);
 
 Route::post('invoice', [InvoiceController::class, 'save']);
 Route::get('invoice', [InvoiceController::class, 'show']);

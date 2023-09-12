@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateItemsTable extends Migration
+class CustomItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('items', function (Blueprint $table) {
-            $table->id()->from(5000);
+        Schema::create('custom_items', function (Blueprint $table) {
+            $table->id();
             $table->string('name');
             $table->string('price');
-            $table->string('url')->nullable();;
-            $table->string('imageUrl')->nullable();;
-            $table->timestamps();
+            $table->integer('amount');
+            $table->unsignedBigInteger('invoice_id');
+            
+            $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
         });
     }
 
@@ -30,6 +31,6 @@ class CreateItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('items');
+        //
     }
 }
