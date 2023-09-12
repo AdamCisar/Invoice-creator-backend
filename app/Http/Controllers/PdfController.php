@@ -16,7 +16,6 @@ class PdfController extends Controller
         //invoice Products
         $invoiceItems = DB::table('invoice_item')
             ->join('items', 'invoice_item.item_id', '=', 'items.id')
-            ->join('custom_items', 'invoice_item.item_id', '=', 'items.id')
             ->where('invoice_item.invoice_id', $id)
             ->select('items.name', 'items.price', 'invoice_item.amount')
             ->get();
@@ -26,9 +25,11 @@ class PdfController extends Controller
             ->select('name','price', 'amount')
             ->where('invoice_id', '=', $id)
             ->get();
-            
-        $products_info = $invoiceItems->concat($customItems);
 
+        $products_info = $invoiceItems;
+
+        if ($customItems->isNotEmpty()) $products_info = $invoiceItems->concat($customItems);
+    
         $pdfService = new PdfService("P","mm","A4");
         $pdfService->AddPage();
         $pdfService->AddFont('DejaVu','','DejaVuSansCondensed.ttf',true);
